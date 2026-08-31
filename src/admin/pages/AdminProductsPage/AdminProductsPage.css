@@ -1,0 +1,645 @@
+/* =========================================================
+   ADMIN PRODUCTS PAGE
+========================================================= */
+
+.admin-products-page {
+  width: 100%;
+  max-width: 1500px;
+  margin: 0 auto;
+  padding: 32px;
+  box-sizing: border-box;
+}
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.admin-products-page__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 28px;
+}
+
+.admin-products-page__header h1 {
+  margin: 0;
+
+  font-size: 30px;
+  line-height: 1.2;
+  font-weight: 700;
+
+  color: #111827;
+}
+
+.admin-products-page__header p {
+  margin: 7px 0 0;
+
+  font-size: 14px;
+  color: #6b7280;
+}
+
+/* =========================================================
+   ADD PRODUCT
+========================================================= */
+
+.admin-products-page__add-button {
+  flex-shrink: 0;
+
+  padding: 11px 18px;
+
+  border: none;
+  border-radius: 8px;
+
+  background: #111827;
+  color: #ffffff;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    transform 0.1s ease;
+}
+
+.admin-products-page__add-button:hover {
+  background: #1f2937;
+}
+
+.admin-products-page__add-button:active {
+  transform: translateY(1px);
+}
+
+/* =========================================================
+   FILTER AREA
+========================================================= */
+
+.admin-products-page__filters {
+  display: grid;
+
+  grid-template-columns:
+    minmax(260px, 2fr)
+    repeat(4, minmax(150px, 1fr))
+    auto;
+
+  align-items: end;
+
+  gap: 12px;
+
+  margin-bottom: 16px;
+}
+
+/* =========================================================
+   SEARCH
+========================================================= */
+
+.admin-products-page__search {
+  display: flex;
+  flex-direction: column;
+
+  gap: 6px;
+}
+
+.admin-products-page__search label,
+.admin-products-page__filter label {
+  font-size: 12px;
+  font-weight: 600;
+
+  color: #6b7280;
+
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.admin-products-page__search input {
+  width: 100%;
+  height: 42px;
+
+  padding: 0 13px;
+
+  box-sizing: border-box;
+
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+
+  background: #ffffff;
+
+  color: #111827;
+
+  font-size: 14px;
+
+  outline: none;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.admin-products-page__search input::placeholder {
+  color: #9ca3af;
+}
+
+.admin-products-page__search input:focus {
+  border-color: #111827;
+
+  box-shadow:
+    0 0 0 3px rgba(17, 24, 39, 0.08);
+}
+
+/* =========================================================
+   SELECT FILTERS
+========================================================= */
+
+.admin-products-page__filter {
+  display: flex;
+  flex-direction: column;
+
+  gap: 6px;
+}
+
+.admin-products-page__filter select {
+  width: 100%;
+  height: 42px;
+
+  padding: 0 10px;
+
+  box-sizing: border-box;
+
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+
+  background: #ffffff;
+
+  color: #374151;
+
+  font-size: 14px;
+
+  outline: none;
+
+  cursor: pointer;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.admin-products-page__filter select:focus {
+  border-color: #111827;
+
+  box-shadow:
+    0 0 0 3px rgba(17, 24, 39, 0.08);
+}
+
+/* =========================================================
+   CLEAR BUTTON
+========================================================= */
+
+.admin-products-page__clear-button {
+  height: 42px;
+
+  padding: 0 14px;
+
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+
+  background: #ffffff;
+
+  color: #374151;
+
+  font-size: 13px;
+  font-weight: 500;
+
+  cursor: pointer;
+
+  white-space: nowrap;
+
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.admin-products-page__clear-button:hover {
+  background: #f9fafb;
+  border-color: #9ca3af;
+}
+
+/* =========================================================
+   RESULT COUNT
+========================================================= */
+
+.admin-products-page__result {
+  margin-bottom: 10px;
+
+  color: #6b7280;
+
+  font-size: 14px;
+}
+
+/* =========================================================
+   TABLE CONTAINER
+========================================================= */
+
+.admin-products-page__table-container {
+  width: 100%;
+
+  overflow-x: auto;
+
+  background: #ffffff;
+
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+
+  box-sizing: border-box;
+}
+
+/* =========================================================
+   TABLE
+========================================================= */
+
+.admin-products-page__table {
+  width: 100%;
+
+  min-width: 950px;
+
+  border-collapse: collapse;
+
+  table-layout: fixed;
+}
+
+/* =========================================================
+   TABLE HEADER
+========================================================= */
+
+.admin-products-page__table thead {
+  background: #f9fafb;
+}
+
+.admin-products-page__table th {
+  height: 48px;
+
+  padding: 0 16px;
+
+  border-bottom: 1px solid #e5e7eb;
+
+  color: #6b7280;
+
+  font-size: 11px;
+  font-weight: 700;
+
+  text-align: left;
+  text-transform: uppercase;
+
+  letter-spacing: 0.05em;
+
+  white-space: nowrap;
+}
+
+/* =========================================================
+   TABLE BODY
+========================================================= */
+
+.admin-products-page__table td {
+  height: 82px;
+
+  padding: 10px 16px;
+
+  border-bottom: 1px solid #f1f5f9;
+
+  color: #374151;
+
+  font-size: 14px;
+
+  vertical-align: middle;
+
+  box-sizing: border-box;
+}
+
+.admin-products-page__table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.admin-products-page__table tbody tr {
+  transition: background 0.15s ease;
+}
+
+.admin-products-page__table tbody tr:hover {
+  background: #fafafa;
+}
+
+/* =========================================================
+   COLUMN WIDTHS
+========================================================= */
+
+/* Product */
+.admin-products-page__table th:nth-child(1),
+.admin-products-page__table td:nth-child(1) {
+  width: 34%;
+}
+
+/* Code */
+.admin-products-page__table th:nth-child(2),
+.admin-products-page__table td:nth-child(2) {
+  width: 10%;
+}
+
+/* Category */
+.admin-products-page__table th:nth-child(3),
+.admin-products-page__table td:nth-child(3) {
+  width: 16%;
+}
+
+/* Company */
+.admin-products-page__table th:nth-child(4),
+.admin-products-page__table td:nth-child(4) {
+  width: 12%;
+}
+
+/* Car */
+.admin-products-page__table th:nth-child(5),
+.admin-products-page__table td:nth-child(5) {
+  width: 13%;
+}
+
+/* MRP */
+.admin-products-page__table th:nth-child(6),
+.admin-products-page__table td:nth-child(6) {
+  width: 8%;
+}
+
+/* Action */
+.admin-products-page__table th:nth-child(7),
+.admin-products-page__table td:nth-child(7) {
+  width: 7%;
+}
+
+/* =========================================================
+   PRODUCT CELL
+========================================================= */
+
+.admin-products-page__product {
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+  min-width: 0;
+}
+
+/* =========================================================
+   PRODUCT IMAGE
+========================================================= */
+
+.admin-products-page__product-image,
+.admin-products-page__product-placeholder {
+  width: 64px;
+  height: 64px;
+
+  min-width: 64px;
+  min-height: 64px;
+
+  flex-shrink: 0;
+
+  border-radius: 7px;
+
+  box-sizing: border-box;
+}
+
+.admin-products-page__product-image {
+  display: block;
+
+  object-fit: cover;
+
+  border: 1px solid #e5e7eb;
+
+  background: #f3f4f6;
+}
+
+.admin-products-page__product-placeholder {
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid #e5e7eb;
+
+  background: #f3f4f6;
+
+  color: #9ca3af;
+
+  font-size: 10px;
+}
+
+/* =========================================================
+   PRODUCT TEXT
+========================================================= */
+
+.admin-products-page__product > div:last-child {
+  min-width: 0;
+}
+
+.admin-products-page__product strong {
+  display: block;
+
+  margin-bottom: 4px;
+
+  color: #111827;
+
+  font-size: 14px;
+  line-height: 1.25;
+  font-weight: 600;
+}
+
+.admin-products-page__product span {
+  display: block;
+
+  color: #6b7280;
+
+  font-size: 12px;
+}
+
+/* =========================================================
+   CATEGORY CELL
+========================================================= */
+
+.admin-products-page__table td:nth-child(3) strong {
+  display: block;
+
+  margin-bottom: 4px;
+
+  color: #111827;
+
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.admin-products-page__table td:nth-child(3) span {
+  display: inline-block;
+
+  padding: 3px 7px;
+
+  border-radius: 4px;
+
+  background: #f3f4f6;
+
+  color: #6b7280;
+
+  font-size: 10px;
+  font-weight: 600;
+
+  text-transform: uppercase;
+}
+
+/* =========================================================
+   CODE
+========================================================= */
+
+.admin-products-page__table td:nth-child(2) {
+  color: #374151;
+
+  font-family: monospace;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+/* =========================================================
+   MRP
+========================================================= */
+
+.admin-products-page__table td:nth-child(6) {
+  color: #111827;
+
+  font-weight: 600;
+
+  white-space: nowrap;
+}
+
+/* =========================================================
+   ACTION BUTTON
+========================================================= */
+
+.admin-products-page__table td:last-child {
+  text-align: left;
+}
+
+.admin-products-page__table td:last-child button {
+  padding: 7px 12px;
+
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+
+  background: #ffffff;
+
+  color: #374151;
+
+  font-size: 12px;
+  font-weight: 500;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.admin-products-page__table td:last-child button:hover {
+  background: #f9fafb;
+
+  border-color: #9ca3af;
+}
+
+/* =========================================================
+   LOADING
+========================================================= */
+
+.admin-products-page__loading {
+  min-height: 300px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  color: #6b7280;
+
+  font-size: 14px;
+}
+
+/* =========================================================
+   EMPTY STATE
+========================================================= */
+
+.admin-products-page__empty {
+  min-height: 300px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  padding: 32px;
+
+  text-align: center;
+}
+
+.admin-products-page__empty h2 {
+  margin: 0 0 8px;
+
+  color: #111827;
+
+  font-size: 20px;
+}
+
+.admin-products-page__empty p {
+  margin: 0;
+
+  color: #6b7280;
+
+  font-size: 14px;
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 1200px) {
+  .admin-products-page__filters {
+    grid-template-columns:
+      minmax(220px, 2fr)
+      repeat(2, minmax(160px, 1fr));
+  }
+
+  .admin-products-page__clear-button {
+    width: fit-content;
+  }
+}
+
+@media (max-width: 768px) {
+  .admin-products-page {
+    padding: 20px 16px;
+  }
+
+  .admin-products-page__header {
+    flex-direction: column;
+  }
+
+  .admin-products-page__add-button {
+    width: 100%;
+  }
+
+  .admin-products-page__filters {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-products-page__clear-button {
+    width: 100%;
+  }
+
+  .admin-products-page__table-container {
+    border-radius: 8px;
+  }
+}

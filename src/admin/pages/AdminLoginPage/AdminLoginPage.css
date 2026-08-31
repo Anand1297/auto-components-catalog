@@ -1,0 +1,273 @@
+/* =========================================================
+   ADMIN LOGIN PAGE
+   ========================================================= */
+
+.admin-login-page {
+  min-height: 100vh;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 24px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #f8fafc 0%,
+      #eef2f7 100%
+    );
+}
+
+
+/* =========================================================
+   LOGIN CONTAINER
+   ========================================================= */
+
+.admin-login {
+  width: 100%;
+  max-width: 420px;
+
+  padding: 36px;
+
+  background: #ffffff;
+
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.admin-login__header {
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.admin-login__header h1 {
+  margin: 0 0 8px;
+
+  color: #111827;
+
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.admin-login__header p {
+  margin: 0;
+
+  color: #6b7280;
+
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+
+/* =========================================================
+   FORM
+   ========================================================= */
+
+.admin-login__form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+
+/* =========================================================
+   FORM FIELD
+   ========================================================= */
+
+.admin-login__field {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.admin-login__field label {
+  color: #374151;
+
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.admin-login__field input {
+  width: 100%;
+
+  padding: 12px 14px;
+
+  box-sizing: border-box;
+
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+
+  outline: none;
+
+  background: #ffffff;
+  color: #111827;
+
+  font-family: inherit;
+  font-size: 15px;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.admin-login__field input::placeholder {
+  color: #9ca3af;
+}
+
+.admin-login__field input:focus {
+  border-color: #111827;
+
+  box-shadow:
+    0 0 0 3px rgba(17, 24, 39, 0.08);
+}
+
+.admin-login__field input:disabled {
+  background: #f3f4f6;
+  cursor: not-allowed;
+}
+
+
+/* =========================================================
+   ERROR MESSAGE
+   ========================================================= */
+
+.admin-login__error {
+  padding: 11px 13px;
+
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+
+  background: #fef2f2;
+  color: #b91c1c;
+
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+
+/* =========================================================
+   LOGIN BUTTON
+   ========================================================= */
+
+.admin-login__button {
+  width: 100%;
+
+  padding: 12px 18px;
+
+  border: none;
+  border-radius: 8px;
+
+  background: #111827;
+  color: #ffffff;
+
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background-color 0.2s ease,
+    transform 0.15s ease,
+    box-shadow 0.2s ease;
+}
+
+.admin-login__button:hover:not(:disabled) {
+  background: #374151;
+
+  transform: translateY(-1px);
+
+  box-shadow:
+    0 5px 12px rgba(17, 24, 39, 0.15);
+}
+
+.admin-login__button:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.admin-login__button:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+
+/* =========================================================
+   BACK TO WEBSITE
+   ========================================================= */
+
+.admin-login__back {
+  margin-top: 24px;
+
+  text-align: center;
+}
+
+.admin-login__back a {
+  color: #4b5563;
+
+  font-size: 14px;
+  font-weight: 500;
+
+  text-decoration: none;
+
+  transition: color 0.2s ease;
+}
+
+.admin-login__back a:hover {
+  color: #111827;
+  text-decoration: underline;
+}
+
+
+/* =========================================================
+   OPTIONAL BRAND
+   ========================================================= */
+
+.admin-login__brand {
+  margin-bottom: 24px;
+
+  text-align: center;
+
+  color: #111827;
+
+  font-size: 18px;
+  font-weight: 700;
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 600px) {
+
+  .admin-login-page {
+    padding: 16px;
+  }
+
+  .admin-login {
+    padding: 28px 22px;
+
+    border-radius: 12px;
+  }
+
+  .admin-login__header {
+    margin-bottom: 25px;
+  }
+
+  .admin-login__header h1 {
+    font-size: 24px;
+  }
+
+  .admin-login__form {
+    gap: 17px;
+  }
+}

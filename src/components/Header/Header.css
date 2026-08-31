@@ -1,0 +1,199 @@
+.app-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: #fff;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.app-header__container {
+  min-height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.app-header__brand {
+  color: #111;
+  text-decoration: none;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.app-header__nav {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+
+.app-header__link {
+  color: #555;
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.app-header__link:hover {
+  color: #111;
+}
+
+.app-header__link--active {
+  color: #111;
+  font-weight: 700;
+}
+
+.app-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: #fff;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.app-header__container {
+  min-height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.app-header__brand {
+  color: #111;
+  text-decoration: none;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.app-header__nav {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+
+.app-header__link {
+  color: #555;
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.app-header__link:hover {
+  color: #111;
+}
+
+.app-header__link--active {
+  color: #111;
+  font-weight: 700;
+}
+
+.app-header__menu-button {
+  display: none;
+  width: 42px;
+  height: 42px;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  background: #fff;
+  cursor: pointer;
+
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+}
+
+.app-header__menu-button span {
+  width: 20px;
+  height: 2px;
+  background: #111;
+}
+
+/* =========================================================
+   ADMIN LOGIN BUTTON
+   ========================================================= */
+
+.app-header__login {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 10px 18px;
+  margin-left: 8px;
+
+  border: 1px solid #111827;
+  border-radius: 8px;
+
+  background: #111827;
+  color: #ffffff;
+
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.app-header__login:hover {
+  background: #374151;
+  border-color: #374151;
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+.app-header__login--active {
+  background: #374151;
+  border-color: #374151;
+  color: #ffffff;
+}
+
+@media (max-width: 768px) {
+  .app-header__container {
+    min-height: 60px;
+  }
+
+  .app-header__menu-button {
+    display: flex;
+  }
+
+  .app-header__nav {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+
+    display: none;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+
+    padding: 8px 0;
+
+    background: #fff;
+    border-bottom: 1px solid #e5e5e5;
+  }
+
+  .app-header__nav--open {
+    display: flex;
+  }
+
+  .app-header__link {
+    padding: 14px 24px;
+  }
+
+  .app-header__link:hover {
+    background: #f5f5f5;
+  }
+
+    .app-header__login {
+    width: 100%;
+    margin-left: 0;
+    margin-top: 8px;
+  }
+  
+}

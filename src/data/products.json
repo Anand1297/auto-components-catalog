@@ -1,0 +1,104 @@
+[
+  {
+    "id": "INT-FM-001",
+    "categoryType": "INTERIOR",
+    "categoryName": "Floor Mats",
+    "company": "AutoLux",
+    "car": "Hyundai Creta",
+    "mrp": 4999,
+    "color": "Black",
+    "model": "7D Premium",
+    "productName": "Premium 7D Floor Mat",
+    "productCode": "AL-FM-001",
+    "packagingUnit": "1 Set",
+    "images":[
+      "/products/default.png",
+      "/products/download.png"
+    ]
+  },
+  {
+    "id": "INT-SC-001",
+    "categoryType": "INTERIOR",
+    "categoryName": "Seat Covers",
+    "company": "AutoLux",
+    "car": "Tata Nexon",
+    "mrp": 6999,
+    "color": "Black & Grey",
+    "model": "Premium Leather",
+    "productName": "Premium Leather Seat Cover",
+    "productCode": "AL-SC-001",
+    "packagingUnit": "1 Set",
+        "images":[
+      "/products/default.png",
+      "/products/download.png"
+    ]
+  },
+  {
+    "id": "INT-SW-001",
+    "categoryType": "INTERIOR",
+    "categoryName": "Steering Covers",
+    "company": "DrivePro",
+    "car": "Maruti Brezza",
+    "mrp": 1499,
+    "color": "Black",
+    "model": "Sport",
+    "productName": "Sport Steering Cover",
+    "productCode": "DP-SW-001",
+    "packagingUnit": "1 Unit",
+        "images":[
+      "/products/default.png",
+      "/products/download.png"
+    ]
+  },
+  {
+    "id": "EXT-MF-001",
+    "categoryType": "EXTERIOR",
+    "categoryName": "Mud Flaps",
+    "company": "DrivePro",
+    "car": "Mahindra XUV700",
+    "mrp": 1299,
+    "color": "Black",
+    "model": "Premium",
+    "productName": "Premium Mud Flap Set",
+    "productCode": "DP-MF-001",
+    "packagingUnit": "1 Set",
+        "images":[
+      "/products/default.png",
+      "/products/no_image.png"
+    ]
+  },
+  {
+    "id": "EXT-DS-001",
+    "categoryType": "EXTERIOR",
+    "categoryName": "Door Sills",
+    "company": "CarStyle",
+    "car": "Kia Seltos",
+    "mrp": 2499,
+    "color": "Silver",
+    "model": "Chrome",
+    "productName": "Chrome Door Sill Plate",
+    "productCode": "CS-DS-001",
+    "packagingUnit": "1 Set",
+        "images":[
+      "/products/default.png",
+      "/products/default1.png"
+    ]
+  },
+  {
+    "id": "EXT-SV-001",
+    "categoryType": "EXTERIOR",
+    "categoryName": "Sun Visors",
+    "company": "CarStyle",
+    "car": "Toyota Innova",
+    "mrp": 2999,
+    "color": "Smoke",
+    "model": "Premium",
+    "productName": "Premium Sun Visor",
+    "productCode": "CS-SV-001",
+    "packagingUnit": "1 Set",
+        "images":[
+      "/products/default2.png",
+      "/products/download.png"
+    ]
+  }
+]
