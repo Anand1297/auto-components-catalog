@@ -22,11 +22,6 @@ function LatestLaunch() {
   const [loading, setLoading] =
     useState(true);
 
-  const [currentIndex, setCurrentIndex] =
-    useState(0);
-
-  const visibleProducts = 4;
-
   useEffect(() => {
     let cancelled = false;
 
@@ -52,35 +47,12 @@ function LatestLaunch() {
       }
     };
 
-    loadProducts();
+    void loadProducts();
 
     return () => {
       cancelled = true;
     };
   }, []);
-
-  const maxIndex = Math.max(
-    products.length -
-      visibleProducts,
-    0,
-  );
-
-  const goToPrevious = () => {
-    setCurrentIndex(
-      (current) =>
-        Math.max(current - 1, 0),
-    );
-  };
-
-  const goToNext = () => {
-    setCurrentIndex(
-      (current) =>
-        Math.min(
-          current + 1,
-          maxIndex,
-        ),
-    );
-  };
 
   if (loading) {
     return (
@@ -89,9 +61,9 @@ function LatestLaunch() {
           <div className="section-header">
             <div>
               <h2>Latest Launch</h2>
+
               <p>
-                Check out our latest
-                products
+                Check out our latest products
               </p>
             </div>
           </div>
@@ -109,13 +81,13 @@ function LatestLaunch() {
   return (
     <section className="latest-launch">
       <div className="container">
+
         <div className="section-header">
           <div>
             <h2>Latest Launch</h2>
 
             <p>
-              Check out our latest
-              products
+              Check out our latest products
             </p>
           </div>
 
@@ -130,60 +102,19 @@ function LatestLaunch() {
           </button>
         </div>
 
-        <div className="latest-launch__carousel">
-          <button
-            type="button"
-            className="latest-launch__button"
-            onClick={
-              goToPrevious
-            }
-            disabled={
-              currentIndex === 0
-            }
-            aria-label="Previous products"
-          >
-            ‹
-          </button>
-
-          <div className="latest-launch__viewport">
+        <div className="latest-launch__scroll">
+          {products.map((product) => (
             <div
-              className="latest-launch__track"
-              style={{
-                transform: `translateX(-${
-                  currentIndex *
-                  (100 /
-                    visibleProducts)
-                }%)`,
-              }}
+              className="latest-launch__item"
+              key={product.id}
             >
-              {products.map(
-                (product) => (
-                  <div
-                    className="latest-launch__item"
-                    key={product.id}
-                  >
-                    <ProductCard
-                      product={product}
-                    />
-                  </div>
-                ),
-              )}
+              <ProductCard
+                product={product}
+              />
             </div>
-          </div>
-
-          <button
-            type="button"
-            className="latest-launch__button"
-            onClick={goToNext}
-            disabled={
-              currentIndex ===
-              maxIndex
-            }
-            aria-label="Next products"
-          >
-            ›
-          </button>
+          ))}
         </div>
+
       </div>
     </section>
   );

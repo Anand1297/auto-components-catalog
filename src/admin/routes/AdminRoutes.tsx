@@ -9,8 +9,8 @@ import AdminLayout
 import ProtectedAdminRoute
   from "../components/ProtectedAdminRoute/ProtectedAdminRoute";
 
-import AdminDashboardPage
-  from "../pages/AdminDashboardPage/AdminDashboardPage";
+// import AdminDashboardPage
+//   from "../pages/AdminDashboardPage/AdminDashboardPage";
 
 import AdminProductsPage
   from "../pages/AdminProductsPage/AdminProductsPage";
@@ -20,6 +20,8 @@ import AdminAddProductPage
 
 import AdminProductDetailPage
   from "../pages/AdminProductDetailPage/AdminProductDetailPage";
+import BusinessSettingsPage from "../pages/BusinessSettingsPage/BusinessSettingsPage";
+import AdminTestimonialsPage from "../pages/AdminTestimonialsPage/AdminTestimonialsPage";
 
 function AdminRoutes() {
   return (
@@ -29,10 +31,10 @@ function AdminRoutes() {
         <Route element={<AdminLayout />}>
 
           {/* /admin */}
-          <Route
+          {/* <Route
             index
             element={<AdminDashboardPage />}
-          />
+          /> */}
 
           {/* /admin/products */}
           <Route
@@ -52,6 +54,16 @@ function AdminRoutes() {
             element={
               <AdminProductDetailPage />
             }
+          />
+
+          <Route
+            path="testimonials"
+            element={<AdminTestimonialsPage />}
+          />
+
+          <Route
+            path="settings"
+            element={<BusinessSettingsPage />}
           />
 
         </Route>

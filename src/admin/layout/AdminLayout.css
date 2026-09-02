@@ -1,7 +1,7 @@
 .admin-layout {
   min-height: 100vh;
   display: flex;
-  background: #f5f6f8;
+  background: var(--color-page);
 }
 
 .admin-layout__main {
@@ -13,6 +13,24 @@
 
 .admin-layout__content {
   flex: 1;
+  min-width: 0;
   padding: 32px;
   overflow-x: auto;
+}
+
+@media (max-width: 900px) {
+  .admin-layout__content {
+    padding: 24px;
+  }
+}
+
+@media (max-width: 700px) {
+  .admin-layout {
+    display: block;
+  }
+
+  .admin-layout__content {
+    padding: 16px 12px;
+    overflow-x: hidden;
+  }
 }

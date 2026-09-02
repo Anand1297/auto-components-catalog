@@ -1,73 +1,99 @@
 .latest-launch {
   padding: 60px 0;
+  background: var(--color-surface);
 }
 
 .latest-launch__view-all {
   border: none;
   background: transparent;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 600;
   cursor: pointer;
 }
 
-.latest-launch__carousel {
+.latest-launch__view-all:hover {
+  text-decoration: underline;
+}
+
+.latest-launch__scroll {
   display: flex;
-  align-items: center;
   gap: 16px;
-}
-
-.latest-launch__viewport {
   width: 100%;
-  overflow: hidden;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 4px 2px 14px;
+  scroll-behavior: smooth;
+  scroll-snap-type: x proximity;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
-.latest-launch__track {
-  display: flex;
-  transition: transform 0.4s ease;
+.latest-launch__scroll::-webkit-scrollbar {
+  display: none;
 }
 
 .latest-launch__item {
-  flex: 0 0 25%;
-  padding: 0 8px;
-  box-sizing: border-box;
-}
-
-.latest-launch__button {
-  flex: 0 0 auto;
-  width: 42px;
-  height: 42px;
-  border: 1px solid #ddd;
-  border-radius: 50%;
-  background: #fff;
-  font-size: 28px;
-  line-height: 1;
-  cursor: pointer;
-}
-
-.latest-launch__button:disabled {
-  opacity: 0.35;
-  cursor: not-allowed;
+  flex: 0 0 calc((100% - 48px) / 4);
+  min-width: 0;
+  scroll-snap-align: start;
 }
 
 @media (max-width: 1024px) {
   .latest-launch__item {
-    flex: 0 0 33.333%;
+    flex-basis: calc((100% - 32px) / 3);
   }
 }
 
 @media (max-width: 768px) {
+  .latest-launch {
+    padding: 44px 0;
+  }
+
   .latest-launch__item {
-    flex: 0 0 50%;
+    flex-basis: calc((100% - 14px) / 2);
   }
 }
 
 @media (max-width: 480px) {
-  .latest-launch__item {
-    flex: 0 0 100%;
+  .latest-launch {
+    padding: 34px 0;
   }
 
-  .latest-launch__button {
-    width: 36px;
-    height: 36px;
+  .latest-launch__scroll {
+    gap: 12px;
+    padding-bottom: 10px;
+  }
+
+  .latest-launch__item {
+    flex-basis: 46%;
+  }
+
+  .latest-launch__view-all {
+    font-size: 13px;
   }
 }
+
+
+.latest-launch__view-all {
+  color: var(--color-primary);
+}
+
+.latest-launch__view-all:hover {
+  color: var(--color-primary-dark);
+}
+
+@media (max-width: 480px) {
+  .latest-launch__scroll {
+    gap: 10px;
+  }
+}
+
+
+@media (max-width: 480px) {
+  .latest-launch__item {
+    flex-basis: 46%;
+  }
+}
+
+.latest-launch { background: transparent; }

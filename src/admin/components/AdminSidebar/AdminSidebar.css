@@ -2,27 +2,34 @@
   width: 240px;
   min-height: 100vh;
   padding: 24px 16px;
-
-  background: #ffffff;
-  border-right: 1px solid #e5e7eb;
-
+  background: #fff;
+  border-right: 1px solid var(--color-border);
   box-sizing: border-box;
+  flex-shrink: 0;
 }
 
 .admin-sidebar__brand {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 5px;
   padding: 0 12px;
-  margin-bottom: 4px;
-
+  margin-bottom: 22px;
   font-size: 20px;
   font-weight: 700;
+}
+
+.admin-sidebar__brand span {
+  color: var(--color-muted);
+  font-size: 12px;
+  font-weight: 600;
 }
 
 .admin-sidebar__title {
   padding: 0 12px;
   margin: 0 0 28px;
-
   font-size: 13px;
-  color: #6b7280;
+  color: var(--color-muted);
 }
 
 .admin-sidebar__nav {
@@ -33,31 +40,76 @@
 
 .admin-sidebar__link {
   display: block;
-
   padding: 11px 12px;
-
   border-radius: 8px;
-
-  color: #374151;
+  color: var(--color-text);
   text-decoration: none;
-
   font-size: 14px;
   font-weight: 500;
-
-  transition:
-    background-color 0.2s ease,
-    color 0.2s ease;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 .admin-sidebar__link:hover {
   background: #f3f4f6;
 }
 
-.admin-sidebar__link--active {
-  background: #111827;
-  color: #ffffff;
+.admin-sidebar__link--active,
+.admin-sidebar__link--active:hover {
+  background: var(--color-ink);
+  color: #fff;
 }
 
-.admin-sidebar__link--active:hover {
-  background: #111827;
+@media (max-width: 900px) {
+  .admin-sidebar {
+    width: 200px;
+  }
+}
+
+@media (max-width: 700px) {
+  .admin-sidebar {
+    width: 100%;
+    min-height: auto;
+    padding: 14px 12px 12px;
+    border-right: none;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .admin-sidebar__brand {
+    margin-bottom: 12px;
+    padding: 0 4px;
+    font-size: 17px;
+  }
+
+  .admin-sidebar__brand span {
+    font-size: 11px;
+  }
+
+  .admin-sidebar__nav {
+    flex-direction: row;
+    gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 2px;
+  }
+
+  .admin-sidebar__link {
+    flex: 0 0 auto;
+    padding: 9px 11px;
+    font-size: 12px;
+    white-space: nowrap;
+  }
+}
+
+
+/* Shared site accent */
+.admin-sidebar__link--active,
+.admin-sidebar__link--active:hover,
+.admin-products-page__add-button,
+.business-settings__actions button {
+  background: var(--color-primary);
+  color: #fff;
+}
+
+.admin-products-page__add-button:hover,
+.business-settings__actions button:hover:not(:disabled) {
+  background: var(--color-primary-dark);
 }

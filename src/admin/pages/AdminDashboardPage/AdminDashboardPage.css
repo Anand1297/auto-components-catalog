@@ -13,13 +13,13 @@
   font-size: 28px;
   font-weight: 700;
 
-  color: #111827;
+  color: var(--color-ink);
 }
 
 .admin-dashboard__subtitle {
   margin: 0;
 
-  color: #6b7280;
+  color: var(--color-muted);
   font-size: 15px;
 }
 
@@ -37,7 +37,7 @@
 
   background: #ffffff;
 
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--color-border);
   border-radius: 12px;
 
   text-decoration: none;
@@ -65,7 +65,7 @@
 .admin-dashboard__card-description {
   margin: 0;
 
-  color: #6b7280;
+  color: var(--color-muted);
 
   font-size: 14px;
 }
@@ -96,5 +96,22 @@
 
   .admin-dashboard__grid {
     grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 480px) {
+  .admin-dashboard__header {
+    margin-bottom: 20px;
+  }
+
+  .admin-dashboard__title {
+    font-size: 22px;
+  }
+
+  .admin-dashboard__subtitle {
+    font-size: 13px;
+  }
+
+  .admin-dashboard__card {
+    padding: 18px;
   }
 }
