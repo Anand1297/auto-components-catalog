@@ -7,5 +7,5 @@ export interface Category {
   categoryType: CategoryType;
   name: string;
   image: string;
-  imageKey: string | null;
+  imageKey?: string | null;
 }

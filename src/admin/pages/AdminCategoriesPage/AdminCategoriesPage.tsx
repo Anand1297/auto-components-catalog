@@ -125,40 +125,40 @@ function AdminCategoriesPage() {
   };
 
   const handleEdit = (
-    category: Category,
-  ) => {
-    setEditingCategoryId(
-      category.id,
-    );
+  category: Category,
+) => {
+  setEditingCategoryId(
+    category.id,
+  );
 
-    setOriginalImageKey(
-      category.imageKey,
-    );
+  setOriginalImageKey(
+    category.imageKey ?? null,
+  );
 
-    setSelectedImageFile(
-      null,
-    );
+  setSelectedImageFile(
+    null,
+  );
 
-    setFormData({
-      name: category.name,
-      type: category.categoryType,
-      imageUrl:
-        category.image ===
-        "/categories/default.png"
-          ? ""
-          : category.image,
-      imageKey:
-        category.imageKey,
-    });
+  setFormData({
+    name: category.name,
+    type: category.categoryType,
+    imageUrl:
+      category.image ===
+      "/categories/default.png"
+        ? ""
+        : category.image,
+    imageKey:
+      category.imageKey ?? null,
+  });
 
-    setError("");
-    setSuccess("");
+  setError("");
+  setSuccess("");
 
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
-  };
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth",
+  });
+};
 
   const handleImageFileChange = (
     event: ChangeEvent<HTMLInputElement>,
