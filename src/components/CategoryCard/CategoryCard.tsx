@@ -1,13 +1,23 @@
+import {
+  useState,
+} from "react";
 import { useNavigate } from "react-router-dom";
+
 import type { Category } from "../../models/Category";
+
 import "./CategoryCard.css";
 
 interface CategoryCardProps {
   category: Category;
 }
 
-function CategoryCard({ category }: CategoryCardProps) {
+function CategoryCard({
+  category,
+}: CategoryCardProps) {
   const navigate = useNavigate();
+
+  const [imageFailed, setImageFailed] =
+    useState(false);
 
   const categoryType =
     category.categoryType === "INTERIOR"
@@ -16,7 +26,9 @@ function CategoryCard({ category }: CategoryCardProps) {
 
   const handleClick = () => {
     navigate(
-      `/category/${categoryType}/${encodeURIComponent(category.name)}`,
+      `/category/${categoryType}/${encodeURIComponent(
+        category.name,
+      )}`,
     );
   };
 
@@ -27,10 +39,20 @@ function CategoryCard({ category }: CategoryCardProps) {
       onClick={handleClick}
     >
       <div className="category-card__image">
-        <img
-          src={category.image}
-          alt={category.name}
-        />
+        {!imageFailed &&
+        category.image ? (
+          <img
+            src={category.image}
+            alt={category.name}
+            onError={() =>
+              setImageFailed(true)
+            }
+          />
+        ) : (
+          <div className="category-card__placeholder">
+            No Image
+          </div>
+        )}
       </div>
 
       <div className="category-card__content">

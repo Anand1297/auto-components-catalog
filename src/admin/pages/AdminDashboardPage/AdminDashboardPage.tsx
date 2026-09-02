@@ -10,7 +10,7 @@ function AdminDashboardPage() {
         <div>
           <h2>Dashboard</h2>
           <p>
-            Manage your Auto Components catalog.
+            Manage your Tarpan Auto Agencies catalog.
           </p>
         </div>
 

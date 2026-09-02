@@ -6,7 +6,7 @@ function AdminSidebar() {
     <aside className="admin-sidebar">
 
       <div className="admin-sidebar__brand">
-        Auto Components
+        Tarpan Auto Agencies
         <span>Admin</span>
       </div>
 
@@ -33,6 +33,17 @@ function AdminSidebar() {
           }
         >
           Products
+        </NavLink>
+
+        <NavLink
+          to="/admin/categories"
+          className={({ isActive }) =>
+            isActive
+              ? "admin-sidebar__link admin-sidebar__link--active"
+              : "admin-sidebar__link"
+          }
+        >
+          Categories
         </NavLink>
 
         <NavLink
