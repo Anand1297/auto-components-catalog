@@ -32,7 +32,7 @@
 
   background: #ffffff;
 
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--color-border);
   border-radius: 16px;
 
   box-shadow:
@@ -52,7 +52,7 @@
 .admin-login__header h1 {
   margin: 0 0 8px;
 
-  color: #111827;
+  color: var(--color-ink);
 
   font-size: 28px;
   font-weight: 700;
@@ -61,7 +61,7 @@
 .admin-login__header p {
   margin: 0;
 
-  color: #6b7280;
+  color: var(--color-muted);
 
   font-size: 14px;
   line-height: 1.5;
@@ -90,7 +90,7 @@
 }
 
 .admin-login__field label {
-  color: #374151;
+  color: var(--color-text);
 
   font-size: 14px;
   font-weight: 600;
@@ -103,13 +103,13 @@
 
   box-sizing: border-box;
 
-  border: 1px solid #d1d5db;
+  border: 1px solid #cbd5e1;
   border-radius: 8px;
 
   outline: none;
 
   background: #ffffff;
-  color: #111827;
+  color: var(--color-ink);
 
   font-family: inherit;
   font-size: 15px;
@@ -124,7 +124,7 @@
 }
 
 .admin-login__field input:focus {
-  border-color: #111827;
+  border-color: var(--color-ink);
 
   box-shadow:
     0 0 0 3px rgba(17, 24, 39, 0.08);
@@ -166,7 +166,7 @@
   border: none;
   border-radius: 8px;
 
-  background: #111827;
+  background: var(--color-ink);
   color: #ffffff;
 
   font-family: inherit;
@@ -182,7 +182,7 @@
 }
 
 .admin-login__button:hover:not(:disabled) {
-  background: #374151;
+  background: var(--color-text);
 
   transform: translateY(-1px);
 
@@ -222,7 +222,7 @@
 }
 
 .admin-login__back a:hover {
-  color: #111827;
+  color: var(--color-ink);
   text-decoration: underline;
 }
 
@@ -236,7 +236,7 @@
 
   text-align: center;
 
-  color: #111827;
+  color: var(--color-ink);
 
   font-size: 18px;
   font-weight: 700;

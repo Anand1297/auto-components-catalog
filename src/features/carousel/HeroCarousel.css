@@ -13,25 +13,27 @@
   display: flex;
   align-items: center;
   min-height: 500px;
-  background: rgba(0, 0, 0, 0.45);
+  background: linear-gradient(90deg, rgba(15,23,42,.80) 0%, rgba(15,23,42,.46) 58%, rgba(15,23,42,.20) 100%);
 }
 
 .hero-carousel__content {
-  width: min(1200px, 100% - 32px);
+  width: min(1200px, calc(100% - 32px));
   margin: 0 auto;
-  color: #ffffff;
+  color: #fff;
 }
 
 .hero-carousel__content h1 {
   max-width: 650px;
   margin: 0 0 16px;
-  font-size: 52px;
+  font-size: 48px;
+  line-height: 1.08;
 }
 
 .hero-carousel__content p {
   max-width: 550px;
   margin: 0;
   font-size: 20px;
+  line-height: 1.5;
 }
 
 .hero-carousel__button {
@@ -77,45 +79,98 @@
 }
 
 .hero-carousel__indicator--active {
-  background: #ffffff;
+  background: #fff;
 }
 
 @media (max-width: 768px) {
   .hero-carousel__slide,
   .hero-carousel__overlay {
-    min-height: 400px;
+    min-height: 360px;
+  }
+
+  .hero-carousel__content {
+    width: min(1200px, calc(100% - 48px));
   }
 
   .hero-carousel__content h1 {
-    font-size: 36px;
+    max-width: 520px;
+    font-size: 32px;
   }
 
   .hero-carousel__content p {
-    font-size: 16px;
+    max-width: 440px;
+    font-size: 15px;
   }
 
   .hero-carousel__button {
-    width: 36px;
-    height: 36px;
-    font-size: 26px;
+    width: 34px;
+    height: 34px;
+    font-size: 24px;
   }
 
   .hero-carousel__button--previous {
-    left: 12px;
+    left: 8px;
   }
 
   .hero-carousel__button--next {
-    right: 12px;
+    right: 8px;
   }
 }
 
 @media (max-width: 480px) {
   .hero-carousel__slide,
   .hero-carousel__overlay {
-    min-height: 350px;
+    min-height: 290px;
+  }
+
+  .hero-carousel__content {
+    width: min(1200px, calc(100% - 44px));
   }
 
   .hero-carousel__content h1 {
-    font-size: 30px;
+    margin-bottom: 10px;
+    font-size: 24px;
+    line-height: 1.12;
+  }
+
+  .hero-carousel__content p {
+    font-size: 13px;
+    line-height: 1.45;
+  }
+
+  .hero-carousel__button {
+    width: 30px;
+    height: 30px;
+    font-size: 21px;
+  }
+
+  .hero-carousel__indicators {
+    bottom: 14px;
+  }
+
+  .hero-carousel__indicator {
+    width: 8px;
+    height: 8px;
+  }
+}
+
+
+.hero-carousel__content h1 {
+  letter-spacing: -0.035em;
+  font-weight: 750;
+}
+
+@media (max-width: 480px) {
+  .hero-carousel__slide,
+  .hero-carousel__overlay {
+    min-height: 250px;
+  }
+
+  .hero-carousel__content h1 {
+    font-size: 22px;
+  }
+
+  .hero-carousel__content p {
+    font-size: 12.5px;
   }
 }

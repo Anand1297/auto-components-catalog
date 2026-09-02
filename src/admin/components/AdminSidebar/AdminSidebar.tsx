@@ -12,7 +12,7 @@ function AdminSidebar() {
 
       <nav className="admin-sidebar__nav">
 
-        <NavLink
+        {/* <NavLink
           to="/admin"
           end
           className={({ isActive }) =>
@@ -22,7 +22,7 @@ function AdminSidebar() {
           }
         >
           Dashboard
-        </NavLink>
+        </NavLink> */}
 
         <NavLink
           to="/admin/products"
@@ -33,6 +33,28 @@ function AdminSidebar() {
           }
         >
           Products
+        </NavLink>
+
+        <NavLink
+          to="/admin/testimonials"
+          className={({ isActive }) =>
+            isActive
+              ? "admin-sidebar__link admin-sidebar__link--active"
+              : "admin-sidebar__link"
+          }
+        >
+          Testimonials
+        </NavLink>
+
+        <NavLink
+          to="/admin/settings"
+          className={({ isActive }) =>
+            isActive
+              ? "admin-sidebar__link admin-sidebar__link--active"
+              : "admin-sidebar__link"
+          }
+        >
+          Business Settings
         </NavLink>
       </nav>
 

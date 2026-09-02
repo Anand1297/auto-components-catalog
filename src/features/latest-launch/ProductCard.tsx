@@ -1,5 +1,7 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import type { Product } from "../../models/Product";
+import "./ProductCard.css";
 
 interface ProductCardProps {
   product: Product;
@@ -9,6 +11,15 @@ function ProductCard({
   product,
 }: ProductCardProps) {
   const navigate = useNavigate();
+
+  const [imageFailed, setImageFailed] =
+    useState(false);
+
+  const imageUrl =
+    product.images?.[0];
+
+  const showImage =
+    Boolean(imageUrl) && !imageFailed;
 
   return (
     <button
@@ -21,33 +32,42 @@ function ProductCard({
       }
     >
       <div className="product-card__image">
-        {product.images.length > 0 ? (
+        {showImage ? (
           <img
-            src={product.images[0]}
+            src={imageUrl}
             alt={product.productName}
+            onError={() =>
+              setImageFailed(true)
+            }
           />
         ) : (
-          <span>Product Image</span>
+          <div className="product-card__image-placeholder">
+            <span>No Image</span>
+          </div>
         )}
       </div>
 
       <div className="product-card__content">
-        <span>
+        <span className="product-card__company">
           {product.company}
         </span>
 
-        <h3>
+        <h3 className="product-card__name">
           {product.productName}
         </h3>
 
-        <p>{product.car}</p>
+        <p className="product-card__car">
+          {product.car}
+        </p>
 
-        <strong>
-          ₹
-          {product.mrp.toLocaleString(
-            "en-IN",
-          )}
-        </strong>
+        <div className="product-card__footer">
+          <strong className="product-card__price">
+            ₹
+            {product.mrp.toLocaleString(
+              "en-IN",
+            )}
+          </strong>
+        </div>
       </div>
     </button>
   );
