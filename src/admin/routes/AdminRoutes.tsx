@@ -22,6 +22,7 @@ import AdminProductDetailPage
   from "../pages/AdminProductDetailPage/AdminProductDetailPage";
 import BusinessSettingsPage from "../pages/BusinessSettingsPage/BusinessSettingsPage";
 import AdminTestimonialsPage from "../pages/AdminTestimonialsPage/AdminTestimonialsPage";
+import AdminCategoriesPage from "../pages/AdminCategoriesPage/AdminCategoriesPage";
 
 function AdminRoutes() {
   return (
@@ -54,6 +55,11 @@ function AdminRoutes() {
             element={
               <AdminProductDetailPage />
             }
+          />
+
+          <Route
+            path="categories"
+            element={<AdminCategoriesPage />}
           />
 
           <Route

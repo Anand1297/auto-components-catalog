@@ -305,3 +305,14 @@ body {
     margin-top: 5px;
   }
 }
+
+
+.category-section__status {
+  margin: 8px 0 0;
+  padding: 18px;
+  border: 1px dashed var(--color-border);
+  border-radius: 12px;
+  color: var(--color-muted);
+  background: rgba(255, 255, 255, 0.55);
+  font-size: 14px;
+}

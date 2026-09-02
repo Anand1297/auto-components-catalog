@@ -52,7 +52,7 @@ function Footer() {
 
             <h3 className="site-footer__brand">
               {settings?.business_name ||
-                "Auto Components"}
+                "Tarpan Auto Agencies"}
             </h3>
 
             <p className="site-footer__description">
@@ -205,7 +205,7 @@ function Footer() {
           <p>
             © {new Date().getFullYear()}{" "}
             {settings?.business_name ||
-              "Auto Components"}.
+              "Tarpan Auto Agencies"}.
             All rights reserved.
           </p>
 

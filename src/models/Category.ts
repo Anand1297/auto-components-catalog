@@ -1,6 +1,11 @@
+export type CategoryType =
+  | "INTERIOR"
+  | "EXTERIOR";
+
 export interface Category {
   id: string;
-  categoryType: "INTERIOR" | "EXTERIOR";
+  categoryType: CategoryType;
   name: string;
   image: string;
+  imageKey: string | null;
 }

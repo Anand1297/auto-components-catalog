@@ -1,4 +1,5 @@
 import {
+  useEffect,
   useState,
   type FormEvent,
 } from "react";
@@ -26,6 +27,71 @@ function AdminLoginPage() {
 
   const [error, setError] =
     useState("");
+
+  const [
+    checkingExistingSession,
+    setCheckingExistingSession,
+  ] = useState(true);
+
+  useEffect(() => {
+    let mounted = true;
+
+    const redirectExistingAdmin =
+      async () => {
+        try {
+          const {
+            data: { session },
+          } =
+            await supabase.auth.getSession();
+
+          if (!session?.user) {
+            return;
+          }
+
+          const {
+            data: adminUser,
+            error: adminError,
+          } = await supabase
+            .from("admin_users")
+            .select("id")
+            .eq(
+              "user_id",
+              session.user.id,
+            )
+            .maybeSingle();
+
+          if (
+            !adminError &&
+            adminUser &&
+            mounted
+          ) {
+            navigate(
+              "/admin/products",
+              {
+                replace: true,
+              },
+            );
+          }
+        } catch (error) {
+          console.error(
+            "Failed to check existing admin session:",
+            error,
+          );
+        } finally {
+          if (mounted) {
+            setCheckingExistingSession(
+              false,
+            );
+          }
+        }
+      };
+
+    void redirectExistingAdmin();
+
+    return () => {
+      mounted = false;
+    };
+  }, [navigate]);
 
   const handleSubmit = async (
     event: FormEvent<HTMLFormElement>,
@@ -127,13 +193,23 @@ function AdminLoginPage() {
     }
   };
 
+  if (checkingExistingSession) {
+    return (
+      <main className="admin-login-page">
+        <div className="admin-login">
+          Checking admin session...
+        </div>
+      </main>
+    );
+  }
+
   return (
     <main className="admin-login-page">
 
       <div className="admin-login">
 
         <div className="admin-login__brand">
-          Auto Components
+          Tarpan Auto Agencies
         </div>
 
         <div className="admin-login__header">
