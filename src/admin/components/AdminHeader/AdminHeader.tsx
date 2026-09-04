@@ -1,50 +1,36 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { supabase } from "../../../lib/supabase";
+import platformAccessService from "../../../services/PlatformAccessService";
 import "./AdminHeader.css";
 
 function AdminHeader() {
   const navigate = useNavigate();
+  const { businessSlug } = useParams();
+  const [loggingOut, setLoggingOut] = useState(false);
+  const [roleLabel, setRoleLabel] = useState("Business Admin");
 
-  const [loggingOut, setLoggingOut] =
-    useState(false);
-
-  // ============================================================
-  // GO TO CUSTOMER CATALOG
-  // ============================================================
+  useEffect(() => {
+    void supabase.auth.getUser()
+      .then(({ data }) => data.user ? platformAccessService.isRootAdmin(data.user.id) : false)
+      .then((isRoot) => setRoleLabel(isRoot ? "Root Admin" : "Business Admin"))
+      .catch(console.error);
+  }, []);
 
   const handleViewCatalog = () => {
-    navigate("/");
+    if (businessSlug) navigate(`/catalog/${businessSlug}`);
+    else navigate("/");
   };
-
-  // ============================================================
-  // LOGOUT
-  // ============================================================
 
   const handleLogout = async () => {
     try {
       setLoggingOut(true);
-
-      const { error } =
-        await supabase.auth.signOut();
-
-      if (error) {
-        throw error;
-      }
-
-      // After logout go to customer home page
-      navigate("/", {
-        replace: true,
-      });
+      const { error } = await supabase.auth.signOut();
+      if (error) throw error;
+      navigate("/", { replace: true });
     } catch (error) {
-      console.error(
-        "Logout failed:",
-        error,
-      );
-
-      alert(
-        "Unable to logout. Please try again.",
-      );
+      console.error("Logout failed:", error);
+      alert("Unable to logout. Please try again.");
     } finally {
       setLoggingOut(false);
     }
@@ -52,40 +38,13 @@ function AdminHeader() {
 
   return (
     <header className="admin-header">
-
-      <div className="admin-header__title">
-        <h1>Admin Panel</h1>
-      </div>
-
+      <div className="admin-header__title"><h1>{businessSlug ? "Business Admin" : "Platform Admin"}</h1></div>
       <div className="admin-header__actions">
-
-        <button
-          type="button"
-          className="admin-header__catalog"
-          onClick={handleViewCatalog}
-        >
-          View Customer Catalog
-        </button>
-
-        <div className="admin-header__user">
-          Admin
-        </div>
-
-        <button
-          type="button"
-          className="admin-header__logout"
-          onClick={handleLogout}
-          disabled={loggingOut}
-        >
-          {loggingOut
-            ? "Logging out..."
-            : "Logout"}
-        </button>
-
+        <button type="button" className="admin-header__catalog" onClick={handleViewCatalog}>{businessSlug ? "View Customer Catalog" : "Platform Home"}</button>
+        <div className="admin-header__user">{roleLabel}</div>
+        <button type="button" className="admin-header__logout" onClick={handleLogout} disabled={loggingOut}>{loggingOut ? "Logging out..." : "Logout"}</button>
       </div>
-
     </header>
   );
 }
-
 export default AdminHeader;

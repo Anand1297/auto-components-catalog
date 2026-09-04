@@ -1,225 +1,53 @@
-import { useEffect, useState } from "react";
-import ProductCard from "../../features/latest-launch/ProductCard";
+import { useEffect, useMemo, useState } from "react";
+import supabaseProductService from "../../services/SupabaseProductService";
+import categoryService from "../../services/CategoryService";
+import attributeService from "../../services/AttributeService";
+import { supabase } from "../../lib/supabase";
+import businessCatalogService from "../../services/BusinessCatalogService";
 import ProductFilters from "../../components/ProductFilters/ProductFilters";
-import supabaseProductService, { type ProductCategoryType } from "../../services/SupabaseProductService";
+import ProductCard from "../../features/latest-launch/ProductCard";
 import type { Product } from "../../models/Product";
+import type { Category } from "../../models/Category";
+import type { Brand, CatalogAttribute } from "../../models/Catalog";
 import "./ProductsPage.css";
 
-function ProductsPage() {
-  const [products, setProducts] =
-    useState<Product[]>([]);
+export default function ProductsPage() {
+  const [products, setProducts] = useState<Product[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [brands, setBrands] = useState<Brand[]>([]);
+  const [attributes, setAttributes] = useState<CatalogAttribute[]>([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [categorySlug, setCategorySlug] = useState("");
+  const [brandSlug, setBrandSlug] = useState("");
+  const [attributeFilters, setAttributeFilters] = useState<Record<string, string>>({});
 
-  const [filteredProducts, setFilteredProducts] =
-    useState<Product[]>([]);
-
-  const [searchTerm, setSearchTerm] =
-    useState("");
-
-  const [categoryType, setCategoryType] =
-    useState<ProductCategoryType>("");
-
-  const [categoryName, setCategoryName] =
-    useState("");
-
-  const [company, setCompany] =
-    useState("");
-
-  const [car, setCar] =
-    useState("");
-
-  const [loading, setLoading] =
-    useState(true);
-
-  const [error, setError] =
-    useState<string | null>(null);
-
-  /**
-   * Load complete product catalog.
-   *
-   * This is used to generate filter options.
-   */
   useEffect(() => {
-    let cancelled = false;
-
-    const loadProducts = async () => {
-      try {
-        setLoading(true);
-        setError(null);
-
-        const result =
-          await supabaseProductService.getProducts();
-
-        if (!cancelled) {
-          setProducts(result);
-          setFilteredProducts(result);
-        }
-      } catch (error) {
-        console.error(
-          "Failed to load products:",
-          error,
-        );
-
-        if (!cancelled) {
-          setError(
-            "Unable to load products.",
-          );
-        }
-      } finally {
-        if (!cancelled) {
-          setLoading(false);
-        }
-      }
-    };
-
-    loadProducts();
-
-    return () => {
-      cancelled = true;
-    };
+    Promise.all([
+      supabaseProductService.getProducts(),
+      categoryService.getCategories(),
+      attributeService.getFilterableAttributes(),
+      businessCatalogService.getBusiness().then(async (business) => {
+        const { data, error } = await supabase.from("brands").select("id,name,slug,logo_url").eq("business_id", business.id).eq("is_active", true).order("sort_order");
+        if (error) throw error;
+        return (data ?? []).map((b) => ({ id: b.id, name: b.name, slug: b.slug, logoUrl: b.logo_url }));
+      }),
+    ]).then(([p, c, a, b]) => { setProducts(p); setCategories(c); setAttributes(a); setBrands(b); }).catch(console.error);
   }, []);
 
-  /**
-   * Load filtered products from Supabase.
-   */
-  useEffect(() => {
-    let cancelled = false;
+  const filtered = useMemo(() => products.filter((product) => {
+    const search = searchTerm.trim().toLowerCase();
+    if (search && ![product.name, product.productCode, product.brand?.name ?? ""].some((v) => v.toLowerCase().includes(search))) return false;
+    if (categorySlug && !product.categories.some((c) => c.slug === categorySlug)) return false;
+    if (brandSlug && product.brand?.slug !== brandSlug) return false;
+    return Object.entries(attributeFilters).every(([slug, value]) => !value || product.attributes.some((a) => a.attributeSlug === slug && a.value === value));
+  }), [products, searchTerm, categorySlug, brandSlug, attributeFilters]);
 
-    const loadFilteredProducts =
-      async () => {
-        try {
-          const result =
-            await supabaseProductService.getFilteredProducts(
-              {
-                searchTerm,
-                categoryType,
-                categoryName,
-                company,
-                car,
-              },
-            );
-
-          if (!cancelled) {
-            setFilteredProducts(result);
-          }
-        } catch (error) {
-          console.error(
-            "Failed to filter products:",
-            error,
-          );
-        }
-      };
-
-    /**
-     * Don't make another request before
-     * initial product loading is complete.
-     */
-    if (!loading) {
-      loadFilteredProducts();
-    }
-
-    return () => {
-      cancelled = true;
-    };
-  }, [
-    searchTerm,
-    categoryType,
-    categoryName,
-    company,
-    car,
-    loading,
-  ]);
-
-  const clearFilters = () => {
-    setSearchTerm("");
-    setCategoryType("");
-    setCategoryName("");
-    setCompany("");
-    setCar("");
-  };
-
-  if (loading) {
-    return (
-      <main className="products-page">
-        <div className="container">
-          <p>Loading products...</p>
-        </div>
-      </main>
-    );
-  }
-
-  if (error) {
-    return (
-      <main className="products-page">
-        <div className="container">
-          <h1>Products</h1>
-          <p>{error}</p>
-        </div>
-      </main>
-    );
-  }
-
+  const clear = () => { setSearchTerm(""); setCategorySlug(""); setBrandSlug(""); setAttributeFilters({}); };
   return (
-    <main className="products-page">
-      <div className="container">
-        <div className="products-page__header">
-          <h1>All Products</h1>
-
-          <p>
-            Browse our complete product
-            catalog.
-          </p>
-        </div>
-
-        <ProductFilters
-          products={products}
-          searchTerm={searchTerm}
-          categoryType={categoryType}
-          categoryName={categoryName}
-          company={company}
-          car={car}
-          showCategoryFilters={true}
-          onSearchChange={setSearchTerm}
-          onCategoryTypeChange={
-            setCategoryType
-          }
-          onCategoryNameChange={
-            setCategoryName
-          }
-          onCompanyChange={setCompany}
-          onCarChange={setCar}
-          onClear={clearFilters}
-        />
-
-        <div className="products-page__count">
-          Showing{" "}
-          {filteredProducts.length} of{" "}
-          {products.length} products
-        </div>
-
-        {filteredProducts.length === 0 ? (
-          <div className="products-page__empty">
-            <h2>No Products Found</h2>
-
-            <p>
-              Try changing your search or
-              filter options.
-            </p>
-          </div>
-        ) : (
-          <div className="products-grid">
-            {filteredProducts.map(
-              (product) => (
-                <ProductCard
-                  key={product.id}
-                  product={product}
-                />
-              ),
-            )}
-          </div>
-        )}
-      </div>
-    </main>
+    <main className="products-page"><div className="container"><h1>All Products</h1><p>Browse the complete catalog.</p>
+      <ProductFilters searchTerm={searchTerm} categorySlug={categorySlug} categories={categories} brandSlug={brandSlug} brands={brands} attributes={attributes} attributeFilters={attributeFilters} onSearchChange={setSearchTerm} onCategoryChange={setCategorySlug} onBrandChange={setBrandSlug} onAttributeChange={(slug, value) => setAttributeFilters((current) => ({ ...current, [slug]: value }))} onClear={clear} />
+      <div className="products-page__count">Showing {filtered.length} products</div>
+      <div className="products-page__grid">{filtered.map((product) => <ProductCard key={product.id} product={product} />)}</div>
+    </div></main>
   );
 }
-
-export default ProductsPage;

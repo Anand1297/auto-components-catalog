@@ -1,224 +1,61 @@
-import {
-  useEffect,
-  useState,
-} from "react";
-
-import {
-  NavLink,
-} from "react-router-dom";
-
+import { useEffect, useState } from "react";
+import { NavLink, useParams } from "react-router-dom";
+import businessCatalogService from "../../services/BusinessCatalogService";
+import platformAccessService from "../../services/PlatformAccessService";
 import { supabase } from "../../lib/supabase";
-
 import "./Header.css";
 
-function Header() {
-  const [menuOpen, setMenuOpen] =
-    useState(false);
-
-  const [isAdmin, setIsAdmin] =
-    useState(false);
-
-  const [checkingAdmin, setCheckingAdmin] =
-    useState(true);
-
-  const closeMenu = () => {
-    setMenuOpen(false);
-  };
+export default function Header() {
+  const { businessSlug = "" } = useParams();
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [businessName, setBusinessName] = useState("Business Catalog");
+  const [adminPath, setAdminPath] = useState("/login");
+  const [hasAdminAccess, setHasAdminAccess] = useState(false);
+  const catalogBase = `/catalog/${businessSlug}`;
 
   useEffect(() => {
-    let mounted = true;
+    businessCatalogService.setActiveBusinessSlug(businessSlug);
+    void businessCatalogService.getBusiness().then((business) => { setBusinessName(business.name); document.title = business.name; }).catch(console.error);
+  }, [businessSlug]);
 
-    const verifyAdmin = async (
-      userId?: string,
-    ) => {
-      if (!userId) {
-        if (mounted) {
-          setIsAdmin(false);
-          setCheckingAdmin(false);
-        }
-
-        return;
-      }
-
+  useEffect(() => {
+    let active = true;
+    const checkAdmin = async () => {
       try {
-        const {
-          data: adminUser,
-          error,
-        } = await supabase
-          .from("admin_users")
-          .select("id")
-          .eq("user_id", userId)
-          .maybeSingle();
-
-        if (error) {
-          throw error;
+        const { data: { session } } = await supabase.auth.getSession();
+        if (!session?.user) { if (active) { setHasAdminAccess(false); setAdminPath("/login"); } return; }
+        if (await platformAccessService.isRootAdmin(session.user.id)) {
+          if (active) { setHasAdminAccess(true); setAdminPath("/admin"); }
+          return;
         }
-
-        if (mounted) {
-          setIsAdmin(
-            Boolean(adminUser),
-          );
+        const business = await businessCatalogService.getBusiness();
+        const membership = await platformAccessService.getBusinessMembership(session.user.id, business.id);
+        if (active) {
+          setHasAdminAccess(Boolean(membership));
+          setAdminPath(membership ? `/admin/business/${businessSlug}` : "/login");
         }
       } catch (error) {
-        console.error(
-          "Failed to verify admin session:",
-          error,
-        );
-
-        if (mounted) {
-          setIsAdmin(false);
-        }
-      } finally {
-        if (mounted) {
-          setCheckingAdmin(false);
-        }
+        console.error("Unable to resolve admin access:", error);
+        if (active) { setHasAdminAccess(false); setAdminPath("/login"); }
       }
     };
+    void checkAdmin();
+    const { data: authListener } = supabase.auth.onAuthStateChange(() => { void checkAdmin(); });
+    return () => { active = false; authListener.subscription.unsubscribe(); };
+  }, [businessSlug]);
 
-    const loadSession = async () => {
-      const {
-        data: { session },
-        error,
-      } =
-        await supabase.auth.getSession();
-
-      if (error) {
-        console.error(
-          "Failed to read session:",
-          error,
-        );
-
-        if (mounted) {
-          setIsAdmin(false);
-          setCheckingAdmin(false);
-        }
-
-        return;
-      }
-
-      await verifyAdmin(
-        session?.user.id,
-      );
-    };
-
-    void loadSession();
-
-    const {
-      data: authListener,
-    } =
-      supabase.auth.onAuthStateChange(
-        (_event, session) => {
-          /*
-           * Run the database verification
-           * outside the auth callback itself.
-           */
-          window.setTimeout(() => {
-            if (mounted) {
-              setCheckingAdmin(true);
-            }
-
-            void verifyAdmin(
-              session?.user.id,
-            );
-          }, 0);
-        },
-      );
-
-    return () => {
-      mounted = false;
-
-      authListener.subscription
-        .unsubscribe();
-    };
-  }, []);
-
+  const close = () => setMenuOpen(false);
   return (
     <header className="app-header">
       <div className="container app-header__container">
-        <NavLink
-          to="/"
-          className="app-header__brand"
-          onClick={closeMenu}
-        >
-          Tarpan Auto Agencies
-        </NavLink>
-
-        <button
-          type="button"
-          className="app-header__menu-button"
-          onClick={() =>
-            setMenuOpen(
-              (open) => !open,
-            )
-          }
-          aria-label="Toggle navigation menu"
-          aria-expanded={menuOpen}
-        >
-          <span />
-          <span />
-          <span />
-        </button>
-
-        <nav
-          className={`app-header__nav ${
-            menuOpen
-              ? "app-header__nav--open"
-              : ""
-          }`}
-        >
-          <NavLink
-            to="/"
-            onClick={closeMenu}
-            className={({
-              isActive,
-            }) =>
-              isActive
-                ? "app-header__link app-header__link--active"
-                : "app-header__link"
-            }
-          >
-            Home
-          </NavLink>
-
-          <NavLink
-            to="/products"
-            onClick={closeMenu}
-            className={({
-              isActive,
-            }) =>
-              isActive
-                ? "app-header__link app-header__link--active"
-                : "app-header__link"
-            }
-          >
-            All Products
-          </NavLink>
-
-          <NavLink
-            to={
-              isAdmin
-                ? "/admin/products"
-                : "/login"
-            }
-            onClick={closeMenu}
-            className={({
-              isActive,
-            }) =>
-              isActive
-                ? "app-header__login app-header__login--active"
-                : "app-header__login"
-            }
-          >
-            {checkingAdmin
-              ? "Admin"
-              : isAdmin
-                ? "Admin Panel"
-                : "Admin Login"}
-          </NavLink>
+        <NavLink to={catalogBase} className="app-header__brand" onClick={close}>{businessName}</NavLink>
+        <button type="button" className="app-header__menu-button" onClick={() => setMenuOpen((v) => !v)} aria-label="Toggle navigation"><span /><span /><span /></button>
+        <nav className={`app-header__nav ${menuOpen ? "app-header__nav--open" : ""}`}>
+          <NavLink to={catalogBase} end onClick={close} className={({ isActive }) => isActive ? "app-header__link app-header__link--active" : "app-header__link"}>Home</NavLink>
+          <NavLink to={`${catalogBase}/products`} onClick={close} className={({ isActive }) => isActive ? "app-header__link app-header__link--active" : "app-header__link"}>All Products</NavLink>
+          <NavLink to={adminPath} onClick={close} className="app-header__login">{hasAdminAccess ? "Admin Panel" : "Admin"}</NavLink>
         </nav>
       </div>
     </header>
   );
 }
-
-export default Header;

@@ -1,0 +1,214 @@
+.admin-businesses .admin-page-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 24px;
+}
+
+.admin-businesses .admin-page-header h2 {
+  margin: 0 0 6px;
+  font-size: 28px;
+}
+
+.admin-businesses .admin-page-header p {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: 14px;
+}
+
+.admin-businesses {
+  max-width: 1180px;
+  margin: 0 auto;
+}
+
+.admin-businesses__add,
+.admin-businesses__form-actions button {
+  border: 0;
+  border-radius: 8px;
+  background: var(--color-primary);
+  color: #fff;
+  padding: 10px 16px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.admin-businesses__add:hover,
+.admin-businesses__form-actions button:hover:not(:disabled) {
+  background: var(--color-primary-dark);
+}
+
+.admin-businesses__error {
+  margin: 0 0 18px;
+  padding: 12px 14px;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  background: #fef2f2;
+  color: #991b1b;
+}
+
+.admin-businesses__form {
+  margin-bottom: 28px;
+  padding: 24px;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: var(--shadow-card);
+}
+
+.admin-businesses__form-heading h3 {
+  margin: 0 0 4px;
+}
+
+.admin-businesses__form-heading p {
+  margin: 0 0 20px;
+  color: var(--color-muted);
+  font-size: 14px;
+}
+
+.admin-businesses__fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.admin-businesses__fields label {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  color: var(--color-text);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.admin-businesses__fields input,
+.admin-businesses__fields select,
+.admin-businesses__fields textarea {
+  width: 100%;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background: #fff;
+  padding: 10px 12px;
+  color: var(--color-ink);
+  outline: none;
+}
+
+.admin-businesses__fields input:focus,
+.admin-businesses__fields select:focus,
+.admin-businesses__fields textarea:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-soft);
+}
+
+.admin-businesses__address {
+  grid-column: 1 / -1;
+}
+
+.admin-businesses__form-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+
+.admin-businesses__form-actions button:disabled {
+  cursor: wait;
+  opacity: 0.65;
+}
+
+.admin-businesses__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 18px;
+}
+
+.admin-businesses__card {
+  padding: 20px;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: var(--shadow-card);
+}
+
+.admin-businesses__card-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.admin-businesses__card h3 {
+  margin: 0 0 4px;
+  font-size: 18px;
+}
+
+.admin-businesses__card-top p {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: 13px;
+}
+
+.admin-businesses__card-top span {
+  border-radius: 999px;
+  background: var(--color-primary-soft);
+  color: var(--color-primary-dark);
+  padding: 5px 9px;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.admin-businesses__card dl {
+  display: grid;
+  gap: 10px;
+  margin: 16px 0 0;
+}
+
+.admin-businesses__card dl div {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.admin-businesses__card dt {
+  color: var(--color-muted);
+  font-size: 13px;
+}
+
+.admin-businesses__card dd {
+  margin: 0;
+  color: var(--color-text);
+  font-size: 13px;
+  text-align: right;
+  overflow-wrap: anywhere;
+}
+
+.admin-businesses__status {
+  padding: 30px;
+  border: 1px dashed var(--color-border);
+  border-radius: 12px;
+  color: var(--color-muted);
+  background: #fff;
+  text-align: center;
+}
+
+@media (max-width: 700px) {
+  .admin-businesses__fields {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-businesses__address {
+    grid-column: auto;
+  }
+}
+
+@media (max-width: 560px) {
+  .admin-businesses .admin-page-header {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .admin-businesses__add {
+    width: 100%;
+  }
+}

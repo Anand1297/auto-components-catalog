@@ -1,119 +1,25 @@
 import { supabase } from "../lib/supabase";
 
-export interface UploadedProductImage {
-  imageKey: string;
-  imageUrl: string;
-}
+export interface UploadedProductImage { storageKey: string; imageUrl: string; }
 
 class R2ImageService {
-  // ============================================================
-  // UPLOAD
-  // ============================================================
+  async uploadProductImage(file: File, businessSlug: string, productId: string): Promise<UploadedProductImage> {
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("businessSlug", businessSlug);
+    formData.append("productId", productId);
 
-  async uploadProductImage(
-    file: File,
-    productCode: string,
-  ): Promise<UploadedProductImage> {
-    const formData =
-      new FormData();
-
-    formData.append(
-      "file",
-      file,
-    );
-
-    formData.append(
-      "productCode",
-      productCode,
-    );
-
-    const {
-      data,
-      error,
-    } =
-      await supabase.functions.invoke(
-        "upload-product-image",
-        {
-          body: formData,
-        },
-      );
-
-    if (error) {
-      console.error(
-        "Failed to upload R2 image:",
-        error,
-      );
-
-      throw new Error(
-        "Unable to upload product image.",
-      );
-    }
-
-    if (
-      !data?.imageKey ||
-      !data?.imageUrl
-    ) {
-      throw new Error(
-        "Invalid response from image upload.",
-      );
-    }
-
-    return {
-      imageKey:
-        data.imageKey,
-
-      imageUrl:
-        data.imageUrl,
-    };
+    const { data, error } = await supabase.functions.invoke("upload-business-product-image", { body: formData });
+    if (error) throw error;
+    if (!data?.storageKey || !data?.imageUrl) throw new Error("Invalid response from image upload.");
+    return { storageKey: data.storageKey, imageUrl: data.imageUrl };
   }
 
-  // ============================================================
-  // DELETE
-  // ============================================================
-
-  async deleteProductImage(
-    imageKey: string,
-  ): Promise<void> {
-    if (!imageKey) {
-      throw new Error(
-        "Image key is required.",
-      );
-    }
-
-    const {
-      data,
-      error,
-    } =
-      await supabase.functions.invoke(
-        "delete-product-image",
-        {
-          body: {
-            imageKey,
-          },
-        },
-      );
-
-    if (error) {
-      console.error(
-        "Failed to delete R2 image:",
-        error,
-      );
-
-      throw new Error(
-        "Unable to delete product image from R2.",
-      );
-    }
-
-    if (!data?.success) {
-      throw new Error(
-        data?.error ||
-          "Unable to delete product image from R2.",
-      );
-    }
+  async deleteProductImage(storageKey: string): Promise<void> {
+    const { data, error } = await supabase.functions.invoke("delete-business-product-image", { body: { storageKey } });
+    if (error) throw error;
+    if (!data?.success) throw new Error(data?.error || "Unable to delete image.");
   }
 }
 
-const r2ImageService =
-  new R2ImageService();
-
-export default r2ImageService;
+export default new R2ImageService();

@@ -1,196 +1,75 @@
 import { supabase } from "../lib/supabase";
+import businessCatalogService from "./BusinessCatalogService";
+import type { Category } from "../models/Category";
 
-import type {
-  Category,
-  CategoryType,
-} from "../models/Category";
+const fallbackImage = "/categories/default.png";
 
-interface CategoryRow {
-  id: string;
-  name: string;
-  type: CategoryType;
-  image_url: string | null;
-  image_key: string | null;
+function mapCategory(row: any): Category {
+  return {
+    id: row.id,
+    businessId: row.business_id,
+    name: row.name,
+    slug: row.slug,
+    parentId: row.parent_id,
+    description: row.description ?? "",
+    image: row.image_url?.trim() || fallbackImage,
+    sortOrder: row.sort_order ?? 0,
+    isActive: row.is_active ?? true,
+    imageKey: null,
+  };
 }
-
-export interface CategoryInput {
-  name: string;
-  type: CategoryType;
-  imageUrl?: string;
-  imageKey?: string | null;
-}
-
-const fallbackImage =
-  "/categories/default.png";
-
-const mapCategory = (
-  row: CategoryRow,
-): Category => ({
-  id: row.id,
-  name: row.name,
-  categoryType: row.type,
-  image:
-    row.image_url?.trim() ||
-    fallbackImage,
-  imageKey:
-    row.image_key ?? null,
-});
 
 class CategoryService {
-  private readonly selectFields =
-    "id,name,type,image_url,image_key";
-
-  async getCategories(): Promise<
-    Category[]
-  > {
-    const { data, error } =
-      await supabase
-        .from("categories")
-        .select(this.selectFields)
-        .order("type")
-        .order("name");
-
-    if (error) {
-      console.error(
-        "Failed to fetch categories:",
-        error,
-      );
-
-      throw new Error(
-        "Unable to load categories.",
-      );
-    }
-
-    return (
-      (data ?? []) as CategoryRow[]
-    ).map(mapCategory);
+  async getCategories(): Promise<Category[]> {
+    const business = await businessCatalogService.getBusiness();
+    const { data, error } = await supabase
+      .from("categories")
+      .select("id,business_id,name,slug,parent_id,description,image_url,sort_order,is_active")
+      .eq("business_id", business.id)
+      .eq("is_active", true)
+      .order("sort_order")
+      .order("name");
+    if (error) throw error;
+    return (data ?? []).map(mapCategory);
   }
 
-  async getCategoriesByType(
-    type: CategoryType,
-  ): Promise<Category[]> {
-    const { data, error } =
-      await supabase
-        .from("categories")
-        .select(this.selectFields)
-        .eq("type", type)
-        .order("name");
-
-    if (error) {
-      console.error(
-        "Failed to fetch categories:",
-        error,
-      );
-
-      throw new Error(
-        "Unable to load categories.",
-      );
-    }
-
-    return (
-      (data ?? []) as CategoryRow[]
-    ).map(mapCategory);
+  async getRootCategories(): Promise<Category[]> {
+    return (await this.getCategories()).filter((category) => !category.parentId);
   }
 
-  async createCategory(
-    input: CategoryInput,
-  ): Promise<Category> {
-    const { data, error } =
-      await supabase
-        .from("categories")
-        .insert({
-          name: input.name.trim(),
-          type: input.type,
-          image_url:
-            input.imageUrl?.trim() ||
-            null,
-          image_key:
-            input.imageKey ?? null,
-        })
-        .select(this.selectFields)
-        .single();
-
-    if (error) {
-      console.error(
-        "Failed to create category:",
-        error,
-      );
-
-      throw new Error(
-        error.code === "23505"
-          ? "A category with this name/type already exists."
-          : "Unable to create category.",
-      );
-    }
-
-    return mapCategory(
-      data as CategoryRow,
-    );
+  async getCategoriesByType(type: "INTERIOR" | "EXTERIOR"): Promise<Category[]> {
+    const root = (await this.getRootCategories()).find((category) => category.slug === type.toLowerCase());
+    if (!root) return [];
+    return this.getChildren(root.id);
   }
 
-  async updateCategory(
-    categoryId: string,
-    input: CategoryInput,
-  ): Promise<Category> {
-    const { data, error } =
-      await supabase
-        .from("categories")
-        .update({
-          name: input.name.trim(),
-          type: input.type,
-          image_url:
-            input.imageUrl?.trim() ||
-            null,
-          image_key:
-            input.imageKey ?? null,
-        })
-        .eq("id", categoryId)
-        .select(this.selectFields)
-        .single();
-
-    if (error) {
-      console.error(
-        "Failed to update category:",
-        error,
-      );
-
-      throw new Error(
-        error.code === "23505"
-          ? "A category with this name/type already exists."
-          : "Unable to update category.",
-      );
-    }
-
-    return mapCategory(
-      data as CategoryRow,
-    );
+  async getChildren(parentId: string): Promise<Category[]> {
+    return (await this.getCategories()).filter((category) => category.parentId === parentId);
   }
 
-  async deleteCategory(
-    categoryId: string,
-  ): Promise<void> {
-    const { error } =
-      await supabase
-        .from("categories")
-        .delete()
-        .eq("id", categoryId);
+  async getCategoryBySlug(slug: string): Promise<Category | undefined> {
+    return (await this.getCategories()).find((category) => category.slug === slug);
+  }
 
-    if (error) {
-      console.error(
-        "Failed to delete category:",
-        error,
-      );
+  async createCategory(input: { name: string; parentId?: string | null; description?: string; imageUrl?: string }): Promise<Category> {
+    const business = await businessCatalogService.getBusiness();
+    const slug = input.name.trim().toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+    const { data, error } = await supabase.from("categories").insert({ business_id: business.id, name: input.name.trim(), slug, parent_id: input.parentId || null, description: input.description?.trim() || null, image_url: input.imageUrl?.trim() || null, is_active: true }).select("id,business_id,name,slug,parent_id,description,image_url,sort_order,is_active").single();
+    if (error) throw error;
+    return mapCategory(data);
+  }
 
-      throw new Error(
-        error.code === "23503"
-          ? "This category is being used by one or more products. Move those products to another category before deleting it."
-          : "Unable to delete category.",
-      );
-    }
+  async updateCategory(categoryId: string, input: { name: string; parentId?: string | null; description?: string; imageUrl?: string }): Promise<Category> {
+    const slug = input.name.trim().toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+    const { data, error } = await supabase.from("categories").update({ name: input.name.trim(), slug, parent_id: input.parentId || null, description: input.description?.trim() || null, image_url: input.imageUrl?.trim() || null }).eq("id", categoryId).select("id,business_id,name,slug,parent_id,description,image_url,sort_order,is_active").single();
+    if (error) throw error;
+    return mapCategory(data);
+  }
+
+  async deleteCategory(categoryId: string): Promise<void> {
+    const { error } = await supabase.from("categories").delete().eq("id", categoryId);
+    if (error) throw error;
   }
 }
 
-const categoryService =
-  new CategoryService();
-
-export default categoryService;
+export default new CategoryService();

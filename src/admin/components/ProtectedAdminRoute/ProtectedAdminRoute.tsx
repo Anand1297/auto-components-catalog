@@ -1,129 +1,25 @@
-import {
-  useEffect,
-  useState,
-  type ReactNode,
-} from "react";
-
-import {
-  Navigate,
-  useLocation,
-} from "react-router-dom";
-
+import { useEffect, useState, type ReactNode } from "react";
+import { Navigate, useLocation } from "react-router-dom";
 import { supabase } from "../../../lib/supabase";
 
-interface ProtectedAdminRouteProps {
-  children: ReactNode;
-}
-
-function ProtectedAdminRoute({
-  children,
-}: ProtectedAdminRouteProps) {
+export default function ProtectedAdminRoute({ children }: { children: ReactNode }) {
   const location = useLocation();
-
-  const [checkingAuth, setCheckingAuth] =
-    useState(true);
-
-  const [isAdmin, setIsAdmin] =
-    useState(false);
+  const [checking, setChecking] = useState(true);
+  const [authenticated, setAuthenticated] = useState(false);
 
   useEffect(() => {
     let mounted = true;
-
-    const checkAdminAccess = async () => {
-      try {
-        setCheckingAuth(true);
-
-        // 1. Check whether a Supabase session exists
-        const {
-          data: { session },
-          error: sessionError,
-        } = await supabase.auth.getSession();
-
-        if (sessionError) {
-          throw sessionError;
-        }
-
-        if (!session?.user) {
-          if (mounted) {
-            setIsAdmin(false);
-          }
-
-          return;
-        }
-
-        // 2. Check whether logged-in user is an admin
-        const {
-          data: adminUser,
-          error: adminError,
-        } = await supabase
-          .from("admin_users")
-          .select("id")
-          .eq(
-            "user_id",
-            session.user.id,
-          )
-          .maybeSingle();
-
-        if (adminError) {
-          throw adminError;
-        }
-
-        if (mounted) {
-          setIsAdmin(Boolean(adminUser));
-        }
-      } catch (error) {
-        console.error(
-          "Failed to verify admin access:",
-          error,
-        );
-
-        if (mounted) {
-          setIsAdmin(false);
-        }
-      } finally {
-        if (mounted) {
-          setCheckingAuth(false);
-        }
-      }
-    };
-
-    void checkAdminAccess();
-
-    return () => {
-      mounted = false;
-    };
+    supabase.auth.getSession()
+      .then(({ data, error }) => {
+        if (error) throw error;
+        if (mounted) setAuthenticated(Boolean(data.session?.user));
+      })
+      .catch((error) => { console.error("Failed to verify session:", error); if (mounted) setAuthenticated(false); })
+      .finally(() => { if (mounted) setChecking(false); });
+    return () => { mounted = false; };
   }, []);
 
-  // Don't redirect while Supabase is still being checked.
-  if (checkingAuth) {
-    return (
-      <div
-        style={{
-          minHeight: "100vh",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        Checking admin access...
-      </div>
-    );
-  }
-
-  // Not logged in OR not an admin
-  if (!isAdmin) {
-    return (
-      <Navigate
-        to="/login"
-        replace
-        state={{
-          from: location.pathname,
-        }}
-      />
-    );
-  }
-
+  if (checking) return <div style={{ minHeight: "100vh", display: "grid", placeItems: "center" }}>Checking session...</div>;
+  if (!authenticated) return <Navigate to="/login" replace state={{ from: location.pathname }} />;
   return <>{children}</>;
 }
-
-export default ProtectedAdminRoute;

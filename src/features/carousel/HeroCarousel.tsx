@@ -1,86 +1,33 @@
 import { useEffect, useState } from "react";
-import { carouselData } from "../../data/carouselData";
+import { useNavigate } from "react-router-dom";
+import businessCatalogService from "../../services/BusinessCatalogService";
+import type { Banner } from "../../models/Catalog";
 import "./HeroCarousel.css";
 
-function HeroCarousel() {
+export default function HeroCarousel() {
+  const navigate = useNavigate();
+  const [slides, setSlides] = useState<Banner[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  const totalSlides = carouselData.length;
+  useEffect(() => { businessCatalogService.getBanners().then(setSlides).catch(console.error); }, []);
+  useEffect(() => {
+    if (slides.length <= 1) return;
+    const interval = window.setInterval(() => setCurrentIndex((i) => (i + 1) % slides.length), 5000);
+    return () => window.clearInterval(interval);
+  }, [slides.length]);
 
-  const goToNext = () => {
-    setCurrentIndex((current) => (current + 1) % totalSlides);
-  };
-
-  const goToPrevious = () => {
-    setCurrentIndex(
-      (current) => (current - 1 + totalSlides) % totalSlides,
-    );
-  };
-
-useEffect(() => {
-  const interval = setInterval(() => {
-    setCurrentIndex((current) => (current + 1) % totalSlides);
-  }, 5000);
-
-  return () => {
-    clearInterval(interval);
-  };
-}, [totalSlides]);
-
-  const currentSlide = carouselData[currentIndex];
-
+  if (!slides.length) return null;
+  const current = slides[currentIndex];
   return (
     <section className="hero-carousel">
-      <div
-        className="hero-carousel__slide"
-        style={{
-          backgroundImage: `url(${currentSlide.imageUrl})`,
-        }}
-      >
-        <div className="hero-carousel__overlay">
-          <div className="hero-carousel__content">
-            <h1>{currentSlide.title}</h1>
-
-            <p>{currentSlide.description}</p>
-          </div>
-        </div>
-
-        <button
-          type="button"
-          className="hero-carousel__button hero-carousel__button--previous"
-          onClick={goToPrevious}
-          aria-label="Previous slide"
-        >
-          ‹
-        </button>
-
-        <button
-          type="button"
-          className="hero-carousel__button hero-carousel__button--next"
-          onClick={goToNext}
-          aria-label="Next slide"
-        >
-          ›
-        </button>
-
-        <div className="hero-carousel__indicators">
-          {carouselData.map((slide, index) => (
-            <button
-              key={slide.id}
-              type="button"
-              className={`hero-carousel__indicator ${
-                index === currentIndex
-                  ? "hero-carousel__indicator--active"
-                  : ""
-              }`}
-              onClick={() => setCurrentIndex(index)}
-              aria-label={`Go to slide ${index + 1}`}
-            />
-          ))}
-        </div>
+      <div className="hero-carousel__slide" style={current.imageUrl ? { backgroundImage: `url(${current.imageUrl})` } : undefined} onClick={() => current.link && navigate(current.link)}>
+        <div className="hero-carousel__overlay"><div className="hero-carousel__content"><h1>{current.title}</h1><p>{current.subtitle}</p></div></div>
+        {slides.length > 1 && <>
+          <button type="button" className="hero-carousel__button hero-carousel__button--previous" onClick={(e) => { e.stopPropagation(); setCurrentIndex((i) => (i - 1 + slides.length) % slides.length); }}>‹</button>
+          <button type="button" className="hero-carousel__button hero-carousel__button--next" onClick={(e) => { e.stopPropagation(); setCurrentIndex((i) => (i + 1) % slides.length); }}>›</button>
+          <div className="hero-carousel__indicators">{slides.map((slide, index) => <button key={slide.id} type="button" className={`hero-carousel__indicator ${index === currentIndex ? "hero-carousel__indicator--active" : ""}`} onClick={(e) => { e.stopPropagation(); setCurrentIndex(index); }} />)}</div>
+        </>}
       </div>
     </section>
   );
 }
-
-export default HeroCarousel;

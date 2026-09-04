@@ -1,64 +1,45 @@
-import {supabase} from "../lib/supabase";
-
+import { supabase } from "../lib/supabase";
+import businessCatalogService from "./BusinessCatalogService";
 import type { BusinessSettings } from "../models/BusinessSettings";
 
 class BusinessSettingsService {
-
   async getBusinessSettings(): Promise<BusinessSettings | null> {
-    const { data, error } = await supabase
-      .from("business_settings")
-      .select("*")
-      .limit(1)
-      .maybeSingle();
-
-    if (error) {
-      console.error(
-        "Failed to load business settings:",
-        error,
-      );
-
-      throw error;
-    }
-
-    return data as BusinessSettings | null;
+    const business = await businessCatalogService.getBusiness();
+    const { data: config, error } = await supabase.from("site_config").select("instagram_url,facebook_url,updated_at").eq("business_id", business.id).maybeSingle();
+    if (error) throw error;
+    return {
+      id: business.id,
+      business_name: business.name,
+      phone: business.phone,
+      mobile: business.phone,
+      whatsapp: business.whatsapp,
+      email: business.email,
+      address: business.address,
+      city: null,
+      state: null,
+      pincode: null,
+      instagram_url: config?.instagram_url ?? null,
+      facebook_url: config?.facebook_url ?? null,
+      updated_at: config?.updated_at ?? "",
+    };
   }
 
+  async updateBusinessSettings(id: string, settings: Partial<BusinessSettings>): Promise<BusinessSettings> {
+    const addressParts = [settings.address, settings.city, settings.state, settings.pincode].filter(Boolean);
+    const { error: businessError } = await supabase.from("businesses").update({
+      name: settings.business_name,
+      phone: settings.phone || settings.mobile || null,
+      whatsapp: settings.whatsapp || null,
+      email: settings.email || null,
+      address: addressParts.join(", ") || null,
+    }).eq("id", id);
+    if (businessError) throw businessError;
 
-  async updateBusinessSettings(
-    id: string,
-    settings: Partial<BusinessSettings>,
-  ): Promise<BusinessSettings> {
-
-    const {
-      id: _id,
-      updated_at: _updatedAt,
-      ...updateData
-    } = settings;
-
-    const { data, error } = await supabase
-      .from("business_settings")
-      .update({
-        ...updateData,
-        updated_at: new Date().toISOString(),
-      })
-      .eq("id", id)
-      .select()
-      .single();
-
-    if (error) {
-      console.error(
-        "Failed to update business settings:",
-        error,
-      );
-
-      throw error;
-    }
-
-    return data as BusinessSettings;
+    const { error: configError } = await supabase.from("site_config").update({ instagram_url: settings.instagram_url || null, facebook_url: settings.facebook_url || null }).eq("business_id", id);
+    if (configError) throw configError;
+    businessCatalogService["businessPromise"] = null as never;
+    return (await this.getBusinessSettings()) as BusinessSettings;
   }
 }
 
-const businessSettingsService =
-  new BusinessSettingsService();
-
-export default businessSettingsService;
+export default new BusinessSettingsService();
